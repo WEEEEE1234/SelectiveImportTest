@@ -108,7 +108,7 @@ import java.util.List;
  * is explained below.
  */
 
-@Autonomous(name="Concept: Vuforia Navigation", group ="Concept")
+@Autonomous(name="VuforiaTest", group ="Tests")
 //@Disabled
 public class VuforiaTest extends LinearOpMode {
 
@@ -248,6 +248,13 @@ public class VuforiaTest extends LinearOpMode {
         redTarget.setLocation(redTargetLocationOnField);
         RobotLog.ii(TAG, "Red Target=%s", format(redTargetLocationOnField));
 
+        //Translates wheel target to its location on the Velocity Vortex field
+        OpenGLMatrix wheelsTargetLocationOnField = OpenGLMatrix
+                .translation(0, mmFTCFieldWidth/2, 146.05F)
+                .multiplied(Orientation.getRotationMatrix(
+                        AxesReference.EXTRINSIC, AxesOrder.XYZ,
+                        AngleUnit.DEGREES,90, 0, 0));
+
        /*
         * To place the Stones Target on the Blue Audience wall:
         * - First we rotate it 90 around the field's X axis to flip it upright
@@ -290,6 +297,7 @@ public class VuforiaTest extends LinearOpMode {
          */
         ((VuforiaTrackableDefaultListener)redTarget.getListener()).setPhoneInformation(phoneLocationOnRobot, parameters.cameraDirection);
         ((VuforiaTrackableDefaultListener)blueTarget.getListener()).setPhoneInformation(phoneLocationOnRobot, parameters.cameraDirection);
+        ((VuforiaTrackableDefaultListener)wheels.getListener()).setPhoneInformation(phoneLocationOnRobot, parameters.cameraDirection);
 
         /**
          * A brief tutorial: here's how all the math is going to work:
@@ -317,6 +325,7 @@ public class VuforiaTest extends LinearOpMode {
 
         /** Start tracking the data sets we care about. */
         stonesAndChips.activate();
+        ftcTargets.activate();
 
         while (opModeIsActive()) {
 
